@@ -14,3 +14,4 @@ class DistanceType(Enum):
     DOT = 'dot'
     COSINE = 'cosine'
     MLP = 'mlp'
+    L2 = 'l2'

@@ -10,6 +10,7 @@ import numpy as np
 import pandas as pd
 import pickle as pkl 
 import torch
+import random
 from torch.utils.data import DataLoader, Dataset
 from unirec.constants.protocols import DataFileFormat
 
@@ -64,6 +65,6 @@ class SeqRecDataset(BaseDataset):
         if len_seq < k:
             res[(k-len_seq):] = x[:]
         else:
-            res[:] = x[len_seq-k:]
+            res[:] = np.random.choice(x, k, replace=False) #x[len_seq-k:] 
         return res
  

@@ -47,11 +47,13 @@ class AddUserHistory(object):
         
         if self.mask_mode == HistoryMaskMode.Unorder.value:
             history = copy.deepcopy(history)
-            for idx, item in enumerate(history):
-                if item in items:
-                    history[idx] = 0
-                    if self.user2history_time is not None:
-                        history_time[idx] = 0
+            for item in items:
+                history = np.delete(history, np.where(history == item))
+            # for idx, item in enumerate(history):
+            #     if item in items:
+            #         history[idx] = 0
+            #         if self.user2history_time is not None:
+            #             history_time[idx] = 0
         elif self.mask_mode == HistoryMaskMode.Autoregressive.value:
             n = []
             # For format T1_1, sample is: [userid, itemid, label, max_len, ...]

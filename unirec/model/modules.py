@@ -80,6 +80,26 @@ class CosineScorer(InnerProductScorer):
         res = ip_score / torch.maximum(deno, self.eps)        
         return res
 
+class L2distanceScorer(nn.Module):
+    def __init__(self):
+        super(L2distanceScorer, self).__init__()
+    
+    def forward(self, x: torch.Tensor, y: torch.Tensor):
+        assert math.fabs(x.dim() - y.dim()) <= 1, "difference of dimension between x and y should be no more than 1."
+        # 3 cases. Some cases could be merged but not easy to understanding after merge
+        ## case1: x.dim() == y.dim(), e.g. [N,D]x[N,D]-one user vs one item, [N,D]x[M,D]-each user vs all items,  ([B,N,D]x[B,N,D], [B,N,D]x[B,M,D], optional, not needed now)
+        if x.dim() == y.dim():
+            if x.size(0) == y.size(0):  # one user vs one item
+                res = -torch.norm(x - y, dim=-1, p=2)   # [N,]
+            else:   # each user vs all items
+                res = -torch.norm(x.unsqueeze(1) - y, dim=-1, p=2)   # [N, M]
+        ## case2: x.dim() = y.dim()+1, e.g. [N,D]x[D], [B,N,D]x[B,D] , one item vs multiple users
+        elif x.dim() > y.dim():
+            res = -torch.norm(x - y.unsqueeze(-2), dim=-1, p=2)   #[B, N]
+        ## case3: x.dim() = y.dim()-1, e.g. [D]x[N,D], [B,D]x[B,N,D], one user vs multiple items
+        else:
+            res= self.forward(y, x)
+        return res
 
 class MLPScorer(nn.Module):
     def __init__(self, embed_dim:int, hidden_dim: Union[int, List[int]], dropout_prob: float, act_f: str='tanh'):
@@ -233,9 +253,13 @@ class AttentionMergeLayer(nn.Module):
         self.h = nn.Parameter(torch.randn([self.input_size, 1]))
         self.softmax = nn.Softmax(dim=-1)
 
-    def forward(self, item_seq_emb):
+    def forward(self, item_seq_emb, item_seq_len):
         item_seq_emb = self.dense(item_seq_emb) 
         att_scores = torch.matmul(item_seq_emb, self.h).squeeze(-1) 
+        ## mask
+        mask = torch.arange(item_seq_emb.size(1), device=item_seq_emb.device).expand(item_seq_emb.size(0), -1) < (item_seq_emb.size(1)-item_seq_len.unsqueeze(1))
+        mask_value = -torch.inf
+        att_scores = att_scores.masked_fill(mask=mask, value=mask_value)
         att_scores = self.softmax(att_scores)
 
         att_emb = torch.matmul(att_scores.unsqueeze(-1).transpose(-1, -2), item_seq_emb).squeeze(1) 

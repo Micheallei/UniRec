@@ -28,6 +28,8 @@ class BaseRecommender(AbstractRecommender):
             self.scorer_layers = modules.InnerProductScorer().to(self.device)
         elif scorer_type == 'cosine':
             self.scorer_layers = modules.CosineScorer(eps=1e-6).to(self.device)
+        elif scorer_type == 'l2':
+            self.scorer_layers = modules.L2distanceScorer().to(self.device)
         else:
             raise ValueError('not supported distance_type: {0}'.format(scorer_type))
         

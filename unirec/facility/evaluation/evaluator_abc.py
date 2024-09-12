@@ -234,6 +234,8 @@ class Evaluator(object):
                     # batch_scores = sp.distance.cdist(user_embeddings, item_embeddings, 'cosine')
                     user_embeddings /= (np.linalg.norm(user_embeddings) + EPS)
                     batch_scores = user_embeddings @ item_embeddings.T
+                elif self.config['distance_type'] == DistanceType.L2.value:
+                    batch_scores = -np.linalg.norm(np.expand_dims(user_embeddings, axis=1) - item_embeddings, axis=-1)
                 else:
                     raise ValueError("Unsupported distance_type for full item evaluation: {0}".format(self.config['distance_type']))
             if isinstance(batch_scores, ssp.spmatrix):

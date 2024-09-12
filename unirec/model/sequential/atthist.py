@@ -18,6 +18,6 @@ class AttHist(SeqRecBase):
         item_seq_emb = self.item_embedding_for_user(item_seq, item_seq_features, time_seq)    
         
         ## actually, there is no sequence informace in this model
-        seq_emb = self.attention(item_seq_emb)  
+        seq_emb = self.attention(item_seq_emb, item_seq_len)  
         return seq_emb
     
