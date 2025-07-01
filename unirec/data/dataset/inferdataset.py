@@ -52,6 +52,8 @@ class InferDataset(Dataset):
             hist = self.user_history[data_id]
             if hist is None:
                 hist = self.empty_history
+            hist = hist[-self.max_seq_len//2:]
+            hist = hist[len(hist)//2:]
             if self.last_item > 0:
                 hist = hist[:-self.last_item]
             n = len(hist)

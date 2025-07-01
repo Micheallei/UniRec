@@ -4,19 +4,19 @@
 ###############################################################################################
 ### Please modify the following variables according to your device and mission requirements ###
 ###############################################################################################
-ROOT_DIR="/home/v-leiyuxuan/working_dir3/UniRec"  # path to UniRec
+ROOT_DIR="/home/t-yuxuanlei/UniRec"  # path to UniRec
 ###############################################################################################
 
 
 # default parameters for local run
-RAW_DATA_DIR="/home/v-leiyuxuan/working_dir3/data/Movies_and_Tv_v2"
+RAW_DATA_DIR="/home/t-yuxuanlei/movies"
 
 MY_DIR=$ROOT_DIR
 DATA_ROOT="$ROOT_DIR/data"
 OUTPUT_ROOT="$ROOT_DIR/output"
 
 # dataset_name='ml-25m-retrieval'
-dataset_name='unirec_unorder_movies_v2'
+dataset_name='unirec_seq_movies_v4'
 
 
 export PYTHONPATH=$MY_DIR

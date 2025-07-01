@@ -7,19 +7,19 @@
 ###############################################################################################
 ### Please modify the following variables according to your device and mission requirements ###
 ###############################################################################################
-LOCAL_ROOT="/home/v-leiyuxuan/working_dir3/UniRec"  # path to UniRec
+LOCAL_ROOT="/home/t-yuxuanlei/UniRec"  # path to UniRec
 
-ALL_DATA_ROOT="/home/v-leiyuxuan/working_dir3/UniRec/data"
+ALL_DATA_ROOT="/home/t-yuxuanlei/UniRec/data"
 
-model_file="/home/v-leiyuxuan/working_dir3/UniRec/output/unirec_unorder_movies_v2/AttHist/train_l2/checkpoint_2024-09-12_120850_21/AttHist.pth"
-output_path="/home/v-leiyuxuan/working_dir3/UniRec/output/unirec_unorder_movies_v2/AttHist/train_l2/checkpoint_2024-09-12_120850_21/"
+model_file="/home/t-yuxuanlei/blob/TuringTest/output/20240921/rec_model/unirec_seq_movies_v4_SASRec_seq_pos_cosine/SASRec.pth"
+output_path="/home/t-yuxuanlei/UniRec/data/"
 ###############################################################################################
 
 
 # default parameters for local run
 MY_DIR=$LOCAL_ROOT
 
-DATASET_NAME="unirec_unorder_movies_v2"
+DATASET_NAME="unirec_seq_movies_v4"
 
 cd $MY_DIR
 export PYTHONPATH=$PWD
